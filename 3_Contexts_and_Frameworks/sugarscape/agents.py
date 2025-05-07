@@ -19,6 +19,12 @@ class SugarAgent(CellAgent):
         self.sugar = sugar
         self.metabolism = metabolism
         self.vision = vision
+    
+    def mutate(self):
+        if self.model.random.random() < 0.5:  # 1% chance of mutation
+            self.metabolism = max(1, self.metabolism + self.model.random.randint(-1, 1))
+            self.vision = max(1, self.vision + self.model.random.randint(-1, 1))
+    
     ## Define movement action
     def move(self):
         ## Determine currently empty cells within line of sight

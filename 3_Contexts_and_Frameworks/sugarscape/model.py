@@ -17,6 +17,12 @@ class SugarScapeModel(mesa.Model):
         n = len(sorted_sugars)
         x = sum(el * (n - ind) for ind, el in enumerate(sorted_sugars)) / (n * sum(sorted_sugars))
         return 1 + (1 / n) - 2 * x
+    ## Helper function to calculate average vision, used in plot
+    def calc_vision(self):
+        agent_visions = [a.vision for a in self.agents]
+        sorted_visions = sorted(agent_visions)
+        return sum(sorted_visions) / len(sorted_visions)
+
     ## Define initiation, inherit seed property from parent class
     def __init__(
         self,
@@ -43,7 +49,8 @@ class SugarScapeModel(mesa.Model):
         )
         ## Define datacollector, which calculates current Gini coefficient
         self.datacollector = mesa.DataCollector(
-            model_reporters = {"Gini": self.calc_gini},
+            model_reporters = {"Gini": self.calc_gini,
+                               "Vision": self.calc_vision},
         )
         ## Import sugar distribution from raster, define grid property
         self.sugar_distribution = np.genfromtxt(Path(__file__).parent / "sugar-map.txt")

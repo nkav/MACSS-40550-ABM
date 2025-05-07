@@ -37,7 +37,7 @@ class Boid(ContinuousSpaceAgent):
         self.neighbors = [n for n in neighbors if n is not self]
 
         # If no neighbors, maintain current direction
-        if not neighbors:
+        if not self.neighbors:
             self.position += self.direction * self.speed
             return
         ## Get difference vector viz. all neighbors
@@ -46,14 +46,14 @@ class Boid(ContinuousSpaceAgent):
         cohere_vector = delta.sum(axis=0) * self.cohere_factor
         ## Get separation vector (i.e. vector moving away from agents within minimum separation range), weighted by separation factor
         separation_vector = (
-            -1 * delta[distances > self.separation].sum(axis=0) * self.separate_factor
+            -1 * delta[distances < self.separation].sum(axis=0) * self.separate_factor
         )
         ## Get matching vector (i.e. vector for moving parallel to neighbors), weighted by matching factor
         match_vector = (
             np.asarray([n.direction for n in neighbors]).sum(axis=0) * self.match_factor
         )
         # Update direction based on the three behaviors, weighted by number of neighbors
-        self.direction -= (cohere_vector + separation_vector + match_vector) / len(
+        self.direction += (cohere_vector + separation_vector + match_vector) / len(
             neighbors
         )
         # Normalize direction vector

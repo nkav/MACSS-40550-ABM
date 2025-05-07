@@ -27,6 +27,7 @@ sugarscape_space = make_mpl_space_component(
 
 ## Define Gini plot
 GiniPlot = make_plot_component("Gini")
+VisionPlot = make_plot_component("Vision")
 
 ## Define variable model parameters
 model_params = {
@@ -60,6 +61,7 @@ page = SolaraViz(
     components=[
         sugarscape_space,
         GiniPlot,
+        VisionPlot
     ],
     model_params=model_params,
     name="Sugarscape",
